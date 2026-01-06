@@ -16,6 +16,23 @@ if (!$rental) {
     die("Rental not found");
 }
 
+$favoriteModel = new Favorite($pdo);
+
+if (isset($_GET['favorite']) && isset($_SESSION['user_id'])) {
+    if ($_GET['favorite'] === 'add') {
+        $favoriteModel->add($_SESSION['user_id'], $rental['id']);
+    }
+    if ($_GET['favorite'] === 'remove') {
+        $favoriteModel->remove($_SESSION['user_id'], $rental['id']);
+    }
+    header("Location: rental_detail.php?id=" . $rental['id']);
+    exit;
+}
+
+$isFavorite = isset($_SESSION['user_id'])
+    ? $favoriteModel->isFavorite($_SESSION['user_id'], $rental['id'])
+    : false;
+
 $bookingError = null;
 $bookingSuccess = null;
 
@@ -61,14 +78,22 @@ if (
 
 <h1><?php echo htmlspecialchars($rental['title']); ?></h1>
 
+<?php if (isset($_SESSION['user_id'])): ?>
+    <?php if ($isFavorite): ?>
+        <a href="?id=<?php echo $rental['id']; ?>&favorite=remove">Remove from favorites</a>
+    <?php else: ?>
+        <a href="?id=<?php echo $rental['id']; ?>&favorite=add">Add to favorites</a>
+    <?php endif; ?>
+<?php endif; ?>
+
 <p><strong>City:</strong> <?php echo htmlspecialchars($rental['city']); ?></p>
 <p><strong>Address:</strong> <?php echo htmlspecialchars($rental['address']); ?></p>
 <p><strong>Price per night:</strong> <?php echo htmlspecialchars($rental['price_per_night']); ?></p>
-<p><strong>Description:</strong></p>
+
 <p><?php echo nl2br(htmlspecialchars($rental['description'])); ?></p>
 
 <?php if (!empty($rental['image_path'])): ?>
-    <img src="<?php echo htmlspecialchars($rental['image_path']); ?>" width="300">
+    <img src="<?php echo htmlspecialchars($rental['image_path']); ?>" width="350">
 <?php endif; ?>
 
 <hr>
