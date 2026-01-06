@@ -71,6 +71,8 @@ SHOW COLUMNS FROM users LIKE 'role';
 ALTER TABLE rentals
 ADD image_path VARCHAR(255) DEFAULT NULL;
 
-DESCRIBE rentals;
+DESCRIBE bookings;
 ALTER TABLE rentals
 ADD is_active TINYINT(1) NOT NULL DEFAULT 1;
+SELECT id, title, price_per_night FROM rentals;
+SELECT * FROM bookings;

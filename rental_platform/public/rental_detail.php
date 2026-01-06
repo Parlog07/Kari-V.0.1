@@ -35,6 +35,16 @@ if (
             'price_per_night' => $rental['price_per_night']
         ]);
 
+        $mailer = new Mailer();
+        $mailer->sendBookingConfirmation(
+            $_SESSION['email'],
+            $_SESSION['full_name'],
+            $rental['title'],
+            $_POST['start_date'],
+            $_POST['end_date'],
+            $rental['price_per_night']
+        );
+
         $bookingSuccess = "Booking confirmed";
     } catch (Exception $e) {
         $bookingError = $e->getMessage();
