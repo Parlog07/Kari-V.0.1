@@ -72,3 +72,5 @@ ALTER TABLE rentals
 ADD image_path VARCHAR(255) DEFAULT NULL;
 
 DESCRIBE rentals;
+ALTER TABLE rentals
+ADD is_active TINYINT(1) NOT NULL DEFAULT 1;
