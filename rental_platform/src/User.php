@@ -48,10 +48,6 @@ class User
             throw new Exception("Invalid credentials");
         }
 
-        if (!$user['is_active']) {
-            throw new Exception("Account disabled");
-        }
-
         return $user;
     }
     public function updateProfile(int $userId, array $data): bool

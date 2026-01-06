@@ -72,5 +72,19 @@ class Rental
             'host_id' => $hostId
         ]);
     }
+    public function findByHost(int $hostId): array
+    {
+        $sql = "SELECT *
+                FROM rentals
+                WHERE host_id = :host_id
+                ORDER BY created_at DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'host_id' => $hostId
+        ]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }
