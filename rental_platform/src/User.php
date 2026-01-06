@@ -54,6 +54,21 @@ class User
 
         return $user;
     }
+    public function updateProfile(int $userId, array $data): bool
+    {
+        $sql = "UPDATE users 
+                SET full_name = :full_name, phone = :phone
+                WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            'full_name' => $data['full_name'],
+            'phone' => $data['phone'],
+            'id' => $userId
+        ]);
+    }
+
 
     public function isAdmin(array $user): bool
     {
