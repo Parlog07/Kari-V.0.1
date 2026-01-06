@@ -15,10 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userModel = new User($pdo);
         $user = $userModel->login($email, $password);
 
-        // Login success → create session
         $_SESSION['user_id'] = $user['id'];
+        $_SESSION['email'] = $user['email'];
         $_SESSION['role'] = $user['role'];
         $_SESSION['full_name'] = $user['full_name'];
+
 
         header("Location: index.php");
         exit;

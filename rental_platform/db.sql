@@ -64,3 +64,8 @@ CREATE TABLE reviews (
     
     UNIQUE KEY unique_review (booking_id)
 );
+
+SHOW COLUMNS FROM users LIKE 'role';
+
+
+
