@@ -12,9 +12,9 @@ class Rental
     public function create(array $data): bool
     {
         $sql = "INSERT INTO rentals 
-                (host_id, title, description, city, address, price_per_night, max_guests)
-                VALUES 
-                (:host_id, :title, :description, :city, :address, :price, :max_guests)";
+            (host_id, title, description, city, address, price_per_night, max_guests, image_path)
+            VALUES 
+            (:host_id, :title, :description, :city, :address, :price, :max_guests, :image_path)";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -25,9 +25,11 @@ class Rental
             'city' => $data['city'],
             'address' => $data['address'],
             'price' => $data['price_per_night'],
-            'max_guests' => $data['max_guests']
+            'max_guests' => $data['max_guests'],
+            'image_path' => $data['image_path']
         ]);
     }
+
     public function findById(int $id): ?array
     {
         $sql = "SELECT * FROM rentals WHERE id = :id LIMIT 1";

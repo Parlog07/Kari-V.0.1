@@ -68,4 +68,7 @@ CREATE TABLE reviews (
 SHOW COLUMNS FROM users LIKE 'role';
 
 
+ALTER TABLE rentals
+ADD image_path VARCHAR(255) DEFAULT NULL;
 
+DESCRIBE rentals;
