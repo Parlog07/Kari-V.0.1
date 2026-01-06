@@ -2,7 +2,6 @@
 require_once "../config/autoload.php";
 session_start();
 
-// Must be logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -12,69 +11,73 @@ $db = new Database();
 $pdo = $db->getConnection();
 
 $bookingModel = new Booking($pdo);
+$mailer = new Mailer();
 
-// Handle cancel action
 if (isset($_GET['cancel'])) {
-    $bookingId = (int) $_GET['cancel'];
-    $bookingModel->cancelByUser($bookingId, $_SESSION['user_id']);
+    $stmt = $pdo->prepare("
+        SELECT b.*, r.title
+        FROM bookings b
+        JOIN rentals r ON r.id = b.rental_id
+        WHERE b.id = :id AND b.user_id = :user_id
+    ");
+    $stmt->execute([
+        'id' => $_GET['cancel'],
+        'user_id' => $_SESSION['user_id']
+    ]);
+    $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($booking) {
+        $bookingModel->cancelByUser($booking['id'], $_SESSION['user_id']);
+        $mailer->sendBookingCancellation(
+            $_SESSION['email'],
+            $_SESSION['full_name'],
+            $booking['title'],
+            $booking['start_date'],
+            $booking['end_date']
+        );
+    }
+
     header("Location: bookings.php");
     exit;
 }
 
-// Fetch user bookings
 $bookings = $bookingModel->findByUser($_SESSION['user_id']);
 ?>
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>My Bookings</title>
-</head>
 <body>
 
 <h2>My Bookings</h2>
 
-<?php if (empty($bookings)): ?>
-    <p>You have no bookings.</p>
-<?php else: ?>
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Rental</th>
-            <th>City</th>
-            <th>Dates</th>
-            <th>Total price</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
+<table border="1">
+    <tr>
+        <th>Rental</th>
+        <th>Dates</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+        <th>Receipt</th>
+    </tr>
 
-        <?php foreach ($bookings as $booking): ?>
-            <tr>
-                <td><?php echo htmlspecialchars($booking['title']); ?></td>
-                <td><?php echo htmlspecialchars($booking['city']); ?></td>
-                <td>
-                    <?php echo $booking['start_date']; ?>
-                    →
-                    <?php echo $booking['end_date']; ?>
-                </td>
-                <td><?php echo $booking['total_price']; ?></td>
-                <td><?php echo $booking['status']; ?></td>
-                <td>
-                    <?php if ($booking['status'] === 'confirmed'): ?>
-                        <a href="?cancel=<?php echo $booking['id']; ?>"
-                           onclick="return confirm('Cancel this booking?');">
-                           Cancel
-                        </a>
-                    <?php else: ?>
-                        —
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-<?php endif; ?>
+<?php foreach ($bookings as $b): ?>
+<tr>
+    <td><?= htmlspecialchars($b['title']) ?></td>
+    <td><?= $b['start_date'] ?> → <?= $b['end_date'] ?></td>
+    <td><?= $b['total_price'] ?></td>
+    <td><?= $b['status'] ?></td>
+    <td>
+        <?php if ($b['status'] === 'confirmed'): ?>
+            <a href="?cancel=<?= $b['id'] ?>">Cancel</a>
+        <?php endif; ?>
+    </td>
+    <td>
+        <a href="receipt.php?id=<?= $b['id'] ?>">PDF</a>
+    </td>
+</tr>
+<?php endforeach; ?>
 
-<br>
-<a href="index.php">Back to rentals</a>
+</table>
 
 </body>
 </html>

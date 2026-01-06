@@ -1,7 +1,6 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 class Mailer
 {
@@ -23,28 +22,32 @@ class Mailer
         $this->mail->isHTML(true);
     }
 
-    public function sendBookingConfirmation(
-        string $toEmail,
-        string $userName,
-        string $rentalTitle,
-        string $startDate,
-        string $endDate,
-        float $totalPrice
-    ): void {
+    public function sendBookingConfirmation($to, $name, $title, $start, $end, $price)
+    {
         $this->mail->clearAddresses();
-        $this->mail->addAddress($toEmail);
-
+        $this->mail->addAddress($to);
         $this->mail->Subject = 'Booking Confirmation';
-
         $this->mail->Body = "
             <h2>Booking Confirmed</h2>
-            <p>Hello {$userName},</p>
-            <p>Your booking for <strong>{$rentalTitle}</strong> is confirmed.</p>
-            <p><strong>Dates:</strong> {$startDate} → {$endDate}</p>
-            <p><strong>Total price:</strong> {$totalPrice}</p>
-            <p>Thank you for using our platform.</p>
+            <p>Hello $name</p>
+            <p>Rental: <strong>$title</strong></p>
+            <p>Dates: $start → $end</p>
+            <p>Total: $price</p>
         ";
+        $this->mail->send();
+    }
 
+    public function sendBookingCancellation($to, $name, $title, $start, $end)
+    {
+        $this->mail->clearAddresses();
+        $this->mail->addAddress($to);
+        $this->mail->Subject = 'Booking Cancelled';
+        $this->mail->Body = "
+            <h2>Booking Cancelled</h2>
+            <p>Hello $name</p>
+            <p>Rental: <strong>$title</strong></p>
+            <p>Dates: $start → $end</p>
+        ";
         $this->mail->send();
     }
 }
