@@ -1,5 +1,6 @@
 <?php
 require_once "../../config/autoload.php";
+include "../../views/navbar.php"; 
 session_start();
 
 // Must be logged in

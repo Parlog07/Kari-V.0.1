@@ -1,5 +1,6 @@
 <?php
 require_once "../config/autoload.php";
+
 session_start();
 
 use Dompdf\Dompdf;

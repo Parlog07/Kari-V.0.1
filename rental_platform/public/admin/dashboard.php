@@ -1,5 +1,6 @@
 <?php
 require_once "../../config/autoload.php";
+include "../../views/navbar.php"; 
 require_once "admin_guard.php";
 
 $db = new Database();
