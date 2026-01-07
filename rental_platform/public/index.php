@@ -1,12 +1,10 @@
 <?php
 require_once "../config/autoload.php";
 
-// 1️⃣ Prepare DB & model
 $db = new Database();
 $pdo = $db->getConnection();
 $rentalModel = new Rental($pdo);
 
-// 2️⃣ Read filters from GET
 $filters = [
     'city'       => $_GET['city'] ?? null,
     'min_price'  => $_GET['min_price'] ?? null,
@@ -15,12 +13,12 @@ $filters = [
     'end_date'   => $_GET['end_date'] ?? null,
 ];
 
-// 3️⃣ Pagination setup
+
 $limit = 6;
 $page = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
-// 4️⃣ Fetch rentals + count
+
 $rentals = $rentalModel->search($filters, $limit, $offset);
 $totalResults = $rentalModel->countSearchResults($filters);
 $totalPages = (int) ceil($totalResults / $limit);
