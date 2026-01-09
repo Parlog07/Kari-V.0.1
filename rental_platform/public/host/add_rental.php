@@ -1,7 +1,6 @@
 <?php
 require_once "../../config/autoload.php";
 include "../../views/navbar.php"; 
-session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");

@@ -70,4 +70,4 @@ SHOW COLUMNS FROM users LIKE 'role';
 
 UPDATE users
 SET role = 'admin'
-WHERE email = 'amineayoub0789@gmail.com';
+WHERE email = 'Admin@gmail.com';
