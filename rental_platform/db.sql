@@ -71,3 +71,4 @@ SHOW COLUMNS FROM users LIKE 'role';
 UPDATE users
 SET role = 'admin'
 WHERE email = 'Admin@gmail.com';
+SHOW COLUMNS FROM rentals LIKE 'is_active';

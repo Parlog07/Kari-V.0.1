@@ -1,10 +1,8 @@
 <?php
 require_once "../../config/autoload.php";
 include "../../views/navbar.php"; 
+require_once "admin_guard.php";
 
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    die("Access denied");
-}
 
 $db = new Database();
 $pdo = $db->getConnection();
