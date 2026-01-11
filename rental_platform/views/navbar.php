@@ -20,6 +20,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
                     <a href="/php/Kari-V.0.1/rental_platform/public/bookings.php" class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-emerald-600 hover:bg-stone-50 rounded-lg transition duration-150">My Bookings</a>
                     <a href="/php/Kari-V.0.1/rental_platform/public/favorites.php" class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-emerald-600 hover:bg-stone-50 rounded-lg transition duration-150">Favorites</a>
+                     <a href="/php/Kari-V.0.1/rental_platform/public/logout.php" class="ml-4 px-4 py-2 text-sm font-medium text-red-400 bg-gradient-to-r from-coral-500 to-orange-500 hover:from-coral-600 hover:to-orange-600 rounded-lg shadow-sm hover:shadow transition duration-150">Logout</a>
 
                     <?php if ($_SESSION['role'] === 'host'): ?>
                         <a href="/php/Kari-V.0.1/rental_platform/public/host/dashboard.php" class="px-4 py-2 text-sm font-medium text-emerald-700 border border-emerald-200 hover:text-emerald-800 hover:bg-emerald-50 hover:border-emerald-300 rounded-lg transition duration-150">Host Dashboard</a>
